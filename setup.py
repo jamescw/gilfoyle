@@ -25,6 +25,6 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.8',
     ],
-    install_requires=['pandas', 'weasyprint', 'jinja2', 'seaborn'],
+    install_requires=['pandas', 'weasyprint<53.0', 'jinja2', 'seaborn'],
     include_package_data=True
 )
