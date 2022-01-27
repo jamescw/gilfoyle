@@ -4,7 +4,7 @@
       <nav class="level is-mobile">
 
         {% for page in page.page_metrics %}
-        <div class="metric level-item has-text-centered">
+        <div class="metric level-item has-text-centered has-background-{{ page['metric_color'] }}">
           <div>
             <p class="metric-title">{{ page['metric_title'] }}</p>
             <p class="metric-value">{{ page['metric_value'] }}</p>
