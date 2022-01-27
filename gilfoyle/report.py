@@ -8,18 +8,14 @@ from jinja2 import FileSystemLoader
 
 
 class Report:
-    def __init__(self,
-                 output,
-                 template='assets/template.html',
-                 base_url='.'
-                 ):
+    def __init__(self, output, template="assets/template.html", base_url="."):
         self.template = template
         self.output = output
         self.base_url = base_url
-        self.payload = ''
-        self.title = ''
-        self.accent_background_color = ''
-        self.accent_font_color = ''
+        self.payload = ""
+        self.title = ""
+        self.accent_background_color = ""
+        self.accent_font_color = ""
 
     """
     Report configuration
@@ -32,13 +28,13 @@ class Report:
         if accent_background_color:
             self.accent_background_color = accent_background_color
         else:
-            self.accent_background_color = '#32B5C9'
+            self.accent_background_color = "#32B5C9"
 
     def set_accent_font_color(self, accent_font_color):
         if accent_font_color:
             self.accent_font_color = accent_font_color
         else:
-            self.accent_font_color = '#FFFFFF'
+            self.accent_font_color = "#FFFFFF"
 
     """
     Add pages
@@ -52,21 +48,23 @@ class Report:
             dict: Payload dictionary to pass to Jinja.
         """
 
-        return {'report': {}, 'pages': []}
+        return {"report": {}, "pages": []}
 
-    def add_page(self,
-                 payload,
-                 page_type,
-                 page_title,
-                 page_layout=None,
-                 page_subheading=None,
-                 page_commentary=None,
-                 page_message=None,
-                 page_notification=None,
-                 page_metrics=None,
-                 page_dataframe=None,
-                 page_visualisation=None,
-                 page_background=None):
+    def add_page(
+        self,
+        payload,
+        page_type,
+        page_title,
+        page_layout=None,
+        page_subheading=None,
+        page_commentary=None,
+        page_message=None,
+        page_notification=None,
+        page_metrics=None,
+        page_dataframe=None,
+        page_visualisation=None,
+        page_background=None,
+    ):
         """Add a new page to the payload for the report.
 
         Args:
@@ -87,19 +85,20 @@ class Report:
             dict: Current payload with new data appended.
         """
 
-        page = {'page_type': page_type,
-                'page_layout': page_layout,
-                'page_title': page_title,
-                'page_subheading': page_subheading,
-                'page_commentary': page_commentary,
-                'page_message': page_message,
-                'page_notification': page_notification,
-                'page_metrics': page_metrics,
-                'page_dataframe': self.format_dataframe(page_dataframe),
-                'page_visualisation': page_visualisation,
-                'page_background': page_background,
-                }
-        payload['pages'].append(page)
+        page = {
+            "page_type": page_type,
+            "page_layout": page_layout,
+            "page_title": page_title,
+            "page_subheading": page_subheading,
+            "page_commentary": page_commentary,
+            "page_message": page_message,
+            "page_notification": page_notification,
+            "page_metrics": page_metrics,
+            "page_dataframe": self.format_dataframe(page_dataframe),
+            "page_visualisation": page_visualisation,
+            "page_background": page_background,
+        }
+        payload["pages"].append(page)
         return payload
 
     @staticmethod
@@ -114,10 +113,12 @@ class Report:
         """
 
         if isinstance(dataframe, pd.DataFrame):
-            formatted_df = dataframe.to_html(classes=['dataframe', 'table', 'is-striped', 'is-fullwidth'],
-                                             max_rows=13,
-                                             max_cols=10,
-                                             index=False)
+            formatted_df = dataframe.to_html(
+                classes=["dataframe", "table", "is-striped", "is-fullwidth"],
+                max_rows=13,
+                max_cols=10,
+                index=False,
+            )
             return formatted_df
 
     """
@@ -159,9 +160,9 @@ class Report:
             dict: Payload with appended values.
         """
 
-        payload['report']['title'] = self.title
-        payload['report']['accent_background_color'] = self.accent_background_color
-        payload['report']['accent_font_color'] = self.accent_font_color
+        payload["report"]["title"] = self.title
+        payload["report"]["accent_background_color"] = self.accent_background_color
+        payload["report"]["accent_font_color"] = self.accent_font_color
 
         return payload
 
@@ -173,15 +174,15 @@ class Report:
     def to_html(html, filename):
         """Write a string of HTML to a file.
 
-        Args:
-            html: string of HTML.
-            filename: filename and path.
-cl
-        Returns:
-            File.
+                Args:
+                    html: string of HTML.
+                    filename: filename and path.
+        cl
+                Returns:
+                    File.
         """
 
-        f = open(filename, 'w')
+        f = open(filename, "w")
         f.write(html)
         f.close()
 
@@ -189,7 +190,7 @@ cl
     Generate PDF
     """
 
-    def create_report(self, payload, output='pdf', verbose=False):
+    def create_report(self, payload, output="pdf", verbose=False):
         """Creates the report.
 
         Args:
@@ -206,11 +207,12 @@ cl
         if verbose:
             print(payload)
 
-        if output == 'html':
+        if output == "html":
             self.to_html(self._render_template(payload), self.output)
         else:
-            return HTML(string=self._render_template(payload),
-                        base_url=self.base_url).write_pdf(self.output)
+            return HTML(
+                string=self._render_template(payload), base_url=self.base_url
+            ).write_pdf(self.output)
 
     """
     Metrics
@@ -248,13 +250,13 @@ cl
         """
 
         if metric_now > metric_before:
-            direction = 'up'
+            direction = "up"
         elif metric_now < metric_before:
-            direction = 'down'
+            direction = "down"
         elif metric_now == metric_before:
-            direction = 'flat'
+            direction = "flat"
         else:
-            direction = ''
+            direction = ""
 
         return direction
 
@@ -304,13 +306,16 @@ cl
 
         return metric
 
-    def add_metric_tile(self,
-                        metric_title,
-                        metric_value_now,
-                        metric_value_before=None,
-                        metric_prefix=None,
-                        metric_suffix=None,
-                        metric_name='year'):
+    def add_metric_tile(
+        self,
+        metric_title,
+        metric_value_now,
+        metric_value_before=None,
+        metric_prefix=None,
+        metric_suffix=None,
+        metric_name="year",
+        metric_color=None,
+    ):
         """Create a metric tile dictionary to append to the metrics list payload.
 
         Args:
@@ -385,19 +390,32 @@ cl
 
         # Get percentage change and change direction
         if metric_value_before:
-            percentage_change = self.get_percentage_change(metric_value_now, metric_value_before)
-            change_direction = self.get_change_direction(metric_value_now, metric_value_before)
-            metric_label = change_direction.capitalize() + ' ' + str(round(percentage_change)) + '% on last ' + metric_name
+            percentage_change = self.get_percentage_change(
+                metric_value_now, metric_value_before
+            )
+            change_direction = self.get_change_direction(
+                metric_value_now, metric_value_before
+            )
+            metric_label = (
+                change_direction.capitalize()
+                + " "
+                + str(round(percentage_change))
+                + "% on last "
+                + metric_name
+            )
         else:
-            metric_label = ''
+            metric_label = ""
 
         # Add prefix or suffix
-        metric_value_now = self.format_number(metric_value_now, metric_prefix, metric_suffix)
+        metric_value_now = self.format_number(
+            metric_value_now, metric_prefix, metric_suffix
+        )
 
         metric = {
-            'metric_title': metric_title,
-            'metric_value': metric_value_now,
-            'metric_label': metric_label
+            "metric_title": metric_title,
+            "metric_value": metric_value_now,
+            "metric_label": metric_label,
+            "metric_color": metric_color,
         }
 
         return metric
